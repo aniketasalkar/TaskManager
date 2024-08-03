@@ -8,16 +8,20 @@ import com.example.taskmanager.models.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 public interface UserService {
     User addUser(String username, String password, String role, String email, String phone, String firstname,
-                 String lastName) throws InvalidUserNameException, EmptyFieldException, InvalidRoleException;
+                 String lastName);
 
     List<UserResponseDto> getAllUsers();
 
     User getUserByEmail(String email);
 
     User getUserByUsername(String username);
+
+    User updateUser(String username, Map<String, Object> userDetails);
 
 }

@@ -1,18 +1,16 @@
 package com.example.taskmanager.services;
 
-import com.example.taskmanager.exceptions.InvalidRoleException;
+import com.example.taskmanager.exceptions.*;
 import com.example.taskmanager.dtos.UserResponseDto;
-import com.example.taskmanager.exceptions.UserNotFoundException;
 import com.example.taskmanager.models.User;
 import com.example.taskmanager.models.UserRoles;
 import com.example.taskmanager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -90,4 +88,27 @@ public class UserServiceImpl implements UserService {
 
         return user.get();
     }
+
+    @Override
+    public User updateUser(String username, Map<String, Object> userDetails) {
+        User user = getUserByUsername(username);
+
+        userDetails.forEach((key, value) -> {
+            Field field = ReflectionUtils.findField(User.class, key);
+            if (field == null) {
+                throw new InvalidFieldException("Invalid Field");
+            }
+            if (field.getName().equals("firstName") || field.getName().equals("lastName") || field.getName().equals("id")) {
+                throw new NonModifiableFieldException("Field firstName or lastName or Id are not modifiable");
+            }
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, user, (String) value);
+        });
+
+        Date currentDate = new Date();
+        user.setUpdatedAt(currentDate);
+
+        return userRepository.save(user);
+    }
+
 }

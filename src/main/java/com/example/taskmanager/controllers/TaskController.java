@@ -16,12 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class TaskController {
 
     @Autowired
     TaskService taskService;
 
-    @RequestMapping("/api/tasks")
+    @RequestMapping("/tasks")
     public ResponseEntity<TaskResponseDto> addTask(@RequestBody TaskRequestDto taskRequestDto) {
 
         try {
@@ -48,7 +49,7 @@ public class TaskController {
     }
 
 
-    @GetMapping("/api/tasks")
+    @GetMapping("/tasks")
     public ResponseEntity<List<TaskResponseDto>> getAllTasks() {
         try {
             List<Task> tasks = taskService.getAllTasks();

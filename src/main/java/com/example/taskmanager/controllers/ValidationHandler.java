@@ -1,8 +1,11 @@
 package com.example.taskmanager.controllers;
 
+import com.example.taskmanager.exceptions.InvalidFieldException;
 import com.example.taskmanager.exceptions.InvalidRoleException;
+import com.example.taskmanager.exceptions.NonModifiableFieldException;
 import com.example.taskmanager.exceptions.UserNotFoundException;
 import com.example.taskmanager.models.ErrorResponse;
+import jdk.jshell.spi.ExecutionControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -57,4 +60,17 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NonModifiableFieldException.class)
+    public ResponseEntity<ErrorResponse> handleNonModifiableFieldException(NonModifiableFieldException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidFieldException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidFieldException(InvalidFieldException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }
