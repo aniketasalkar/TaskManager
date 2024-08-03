@@ -11,7 +11,10 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    User addUser(String username, String password, String role, String email, String phone) throws InvalidUserNameException, EmptyFieldException, InvalidRoleException;
+    User addUser(String username, String password, String role, String email, String phone, String firstname,
+                 String lastName) throws InvalidUserNameException, EmptyFieldException, InvalidRoleException;
+
     List<UserResponseDto> getAllUsers();
+
     User getUserById(String email);
 }

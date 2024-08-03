@@ -5,6 +5,7 @@ import com.example.taskmanager.dtos.UserResponseDto;
 import com.example.taskmanager.models.User;
 import com.example.taskmanager.repositories.UserRepository;
 import com.example.taskmanager.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,12 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/api/users")
-    public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserResponseDto> addUser(@Valid @RequestBody UserRequestDto userRequestDto){
 
         try {
             User user = userService.addUser(userRequestDto.getUsername(), userRequestDto.getPassword(),
-                    userRequestDto.getRole(), userRequestDto.getEmail(), userRequestDto.getPhone());
+                    userRequestDto.getRole(), userRequestDto.getEmail(), userRequestDto.getPhone(),
+                    userRequestDto.getFirstname(), userRequestDto.getLastname());
 
             UserResponseDto userResponseDto = new UserResponseDto();
             userResponseDto.setUsername(user.getUsername());
@@ -37,13 +39,8 @@ public class UserController {
             userResponseDto.setPhone(user.getPhone());
             userResponseDto.setRole(user.getRole().toString());
             userResponseDto.setId(user.getId());
-
-
-//            userResponseDto.setUsername("abc");
-//            userResponseDto.setEmail("abc@gmail.com");
-//            userResponseDto.setPhone("1234567890");
-//            userResponseDto.setRole("ADMIN");
-//            userResponseDto.setId(2L);
+            userResponseDto.setFirstName(user.getFirstName());
+            userResponseDto.setLastName(user.getLastName());
 
             return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
 
@@ -68,7 +65,7 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{email}")
-    public ResponseEntity<UserResponseDto> getUserByIEmail(@RequestParam("email") String email){
+    public ResponseEntity<UserResponseDto> getUserByIEmail(@PathVariable("email") String email){
         try {
             User user = userService.getUserById(email);
 

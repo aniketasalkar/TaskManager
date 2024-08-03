@@ -17,5 +17,7 @@ public class UserResponseDto {
     private String email;
     private String phone;
     private Long id;
+    private String firstName;
+    private String lastName;
 //    private ResponseStatus status;
 }

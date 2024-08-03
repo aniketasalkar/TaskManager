@@ -1,9 +1,6 @@
 package com.example.taskmanager.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +14,10 @@ import lombok.Setter;
 @Table(name = "users")
 public class User extends BaseModel{
 
+    @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(nullable = false)
     private String password;
 
 //    BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -30,9 +30,19 @@ public class User extends BaseModel{
 //    boolean passwordIsValid = bCryptPasswordEncoder.matches("password", bCryptedPassword);
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserRoles role;
 
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(unique = true)
     private String phone;
+
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
 
 }

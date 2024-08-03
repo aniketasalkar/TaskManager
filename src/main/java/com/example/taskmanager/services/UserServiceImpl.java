@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,14 +18,19 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
-    public User addUser(String username, String password, String role, String email, String phone)
-            throws EmptyFieldException, InvalidRoleException {
+    public User addUser(String username, String password, String role, String email, String phone,
+                        String firstName, String lastName) throws InvalidRoleException {
 
-        if (username.trim().isEmpty() || password.trim().isEmpty() || email.trim().isEmpty() || phone.trim().isEmpty()) {
-            throw new EmptyFieldException("Empty Field");
+//        if (username.trim().isEmpty() || password.trim().isEmpty() || email.trim().isEmpty()
+//                || firstName.trim().isEmpty() || lastName.trim().isEmpty()) {
+//            throw new EmptyFieldException("Empty Field");
+//        }
+
+        if (role.isEmpty()) {
+            role = "USER";
         }
 
         if (UserRoles.USER != UserRoles.valueOf(role.toUpperCase()) &&
@@ -32,12 +38,19 @@ public class UserServiceImpl implements UserService {
             throw new InvalidRoleException("Invalid Role");
         }
 
+
+        Date currentDate = new Date();
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
         user.setRole(UserRoles.valueOf(role.toUpperCase()));
         user.setEmail(email);
         user.setPhone(phone);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setCreatedAt(currentDate);
+        user.setUpdatedAt(currentDate);
 
         return userRepository.save(user);
 
@@ -55,6 +68,8 @@ public class UserServiceImpl implements UserService {
             userResponseDto.setEmail(user.getEmail());
             userResponseDto.setRole(user.getRole().toString());
             userResponseDto.setPhone(user.getPhone());
+            userResponseDto.setFirstName(user.getFirstName());
+            userResponseDto.setLastName(user.getLastName());
 
             userResponseDtos.add(userResponseDto);
         }
