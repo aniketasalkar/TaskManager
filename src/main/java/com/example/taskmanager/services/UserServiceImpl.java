@@ -1,8 +1,8 @@
 package com.example.taskmanager.services;
 
-import com.example.taskmanager.Exceptions.EmptyFieldException;
-import com.example.taskmanager.Exceptions.InvalidRoleException;
+import com.example.taskmanager.exceptions.InvalidRoleException;
 import com.example.taskmanager.dtos.UserResponseDto;
+import com.example.taskmanager.exceptions.UserNotFoundException;
 import com.example.taskmanager.models.User;
 import com.example.taskmanager.models.UserRoles;
 import com.example.taskmanager.repositories.UserRepository;
@@ -22,29 +22,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(String username, String password, String role, String email, String phone,
-                        String firstName, String lastName) throws InvalidRoleException {
-
-//        if (username.trim().isEmpty() || password.trim().isEmpty() || email.trim().isEmpty()
-//                || firstName.trim().isEmpty() || lastName.trim().isEmpty()) {
-//            throw new EmptyFieldException("Empty Field");
-//        }
+                        String firstName, String lastName) {
 
         if (role.isEmpty()) {
             role = "USER";
         }
-
-        if (UserRoles.USER != UserRoles.valueOf(role.toUpperCase()) &&
-                UserRoles.ADMIN != UserRoles.valueOf(role.toUpperCase())) {
-            throw new InvalidRoleException("Invalid Role");
-        }
-
 
         Date currentDate = new Date();
 
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        user.setRole(UserRoles.valueOf(role.toUpperCase()));
+        try {
+            user.setRole(UserRoles.valueOf(role.toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            throw new InvalidRoleException("Invalid Role");
+        }
         user.setEmail(email);
         user.setPhone(phone);
         user.setFirstName(firstName);
@@ -78,10 +71,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(String email) {
+    public User getUserByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("User not found");
+        }
 
-        return user.orElse(null);
+        return user.get();
 
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        return user.get();
     }
 }

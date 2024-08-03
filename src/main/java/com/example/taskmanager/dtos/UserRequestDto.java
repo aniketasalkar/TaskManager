@@ -24,16 +24,16 @@ public class UserRequestDto {
 
     private String role;
 
-    @Nonnull
+    @NotEmpty(message = "Email Required")
     @Email
     private String email;
 
     @Size(min = 10, max = 10, message = "Invalid phone number. Must be 10 digit")
     private String phone;
 
-    @Nonnull
+    @NotEmpty(message = "firstName Required")
     private String firstname;
 
-    @Nonnull
+    @NotEmpty(message = "lastname Required")
     private String lastname;
 }

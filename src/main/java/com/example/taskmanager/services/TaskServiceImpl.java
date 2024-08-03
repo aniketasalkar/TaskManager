@@ -1,8 +1,8 @@
 package com.example.taskmanager.services;
 
-import com.example.taskmanager.Exceptions.EmptyFieldException;
-import com.example.taskmanager.Exceptions.InvalidDateException;
-import com.example.taskmanager.Exceptions.InvalidTaskTypeException;
+import com.example.taskmanager.exceptions.EmptyFieldException;
+import com.example.taskmanager.exceptions.InvalidDateException;
+import com.example.taskmanager.exceptions.InvalidTaskTypeException;
 import com.example.taskmanager.models.Task;
 import com.example.taskmanager.models.TaskAndProjectStatus;
 import com.example.taskmanager.models.TaskPriority;

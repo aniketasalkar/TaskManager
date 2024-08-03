@@ -1,8 +1,8 @@
 package com.example.taskmanager.services;
 
-import com.example.taskmanager.Exceptions.EmptyFieldException;
-import com.example.taskmanager.Exceptions.InvalidRoleException;
-import com.example.taskmanager.Exceptions.InvalidUserNameException;
+import com.example.taskmanager.exceptions.EmptyFieldException;
+import com.example.taskmanager.exceptions.InvalidRoleException;
+import com.example.taskmanager.exceptions.InvalidUserNameException;
 import com.example.taskmanager.dtos.UserResponseDto;
 import com.example.taskmanager.models.User;
 import org.springframework.stereotype.Service;
@@ -16,5 +16,8 @@ public interface UserService {
 
     List<UserResponseDto> getAllUsers();
 
-    User getUserById(String email);
+    User getUserByEmail(String email);
+
+    User getUserByUsername(String username);
+
 }

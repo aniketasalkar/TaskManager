@@ -15,10 +15,6 @@ import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
 
-//import static com.oracle.graal.phases.preciseinline.data.a.k;
-
-//import static com.oracle.graal.compiler.enterprise.c.t;
-
 @RestController
 public class UserController {
 
@@ -28,64 +24,59 @@ public class UserController {
     @PostMapping("/api/users")
     public ResponseEntity<UserResponseDto> addUser(@Valid @RequestBody UserRequestDto userRequestDto){
 
-        try {
-            User user = userService.addUser(userRequestDto.getUsername(), userRequestDto.getPassword(),
-                    userRequestDto.getRole(), userRequestDto.getEmail(), userRequestDto.getPhone(),
-                    userRequestDto.getFirstname(), userRequestDto.getLastname());
+        User user = userService.addUser(userRequestDto.getUsername(), userRequestDto.getPassword(),
+                userRequestDto.getRole(), userRequestDto.getEmail(), userRequestDto.getPhone(),
+                userRequestDto.getFirstname(), userRequestDto.getLastname());
 
-            UserResponseDto userResponseDto = new UserResponseDto();
-            userResponseDto.setUsername(user.getUsername());
-            userResponseDto.setEmail(user.getEmail());
-            userResponseDto.setPhone(user.getPhone());
-            userResponseDto.setRole(user.getRole().toString());
-            userResponseDto.setId(user.getId());
-            userResponseDto.setFirstName(user.getFirstName());
-            userResponseDto.setLastName(user.getLastName());
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setUsername(user.getUsername());
+        userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setPhone(user.getPhone());
+        userResponseDto.setRole(user.getRole().toString());
+        userResponseDto.setId(user.getId());
+        userResponseDto.setFirstName(user.getFirstName());
+        userResponseDto.setLastName(user.getLastName());
 
-            return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
     }
 
 
     @GetMapping("/api/users")
     public ResponseEntity<List<UserResponseDto>> getAllUsers(){
-//        UserResponseDto userResponseDto = new UserResponseDto();
 
-        try {
-            List<UserResponseDto> userResponseDtos = userService.getAllUsers();
+        List<UserResponseDto> userResponseDtos = userService.getAllUsers();
 
-            return ok(userResponseDtos);
+        return ok(userResponseDtos);
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
-    @GetMapping("/api/users/{email}")
+    @GetMapping("/api/users/email/{email}")
     public ResponseEntity<UserResponseDto> getUserByIEmail(@PathVariable("email") String email){
-        try {
-            User user = userService.getUserById(email);
+        User user = userService.getUserByEmail(email);
 
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-
-            UserResponseDto userResponseDto = new UserResponseDto();
-            userResponseDto.setUsername(user.getUsername());
-            userResponseDto.setEmail(user.getEmail());
-            userResponseDto.setPhone(user.getPhone());
-            userResponseDto.setRole(user.getRole().toString());
-            userResponseDto.setId(user.getId());
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setUsername(user.getUsername());
+        userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setPhone(user.getPhone());
+        userResponseDto.setRole(user.getRole().toString());
+        userResponseDto.setId(user.getId());
 
 
-            return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
-//            return ok((UserResponseDto) userRepository.findAll());
+        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+    }
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @GetMapping("/api/users/username/{username}")
+    public ResponseEntity<UserResponseDto> getUserByUsername(@PathVariable("username") String username){
+        User user = userService.getUserByUsername(username);
+
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setUsername(user.getUsername());
+        userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setPhone(user.getPhone());
+        userResponseDto.setRole(user.getRole().toString());
+        userResponseDto.setId(user.getId());
+
+        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+
     }
 }

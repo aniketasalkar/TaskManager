@@ -1,4 +1,4 @@
-package com.example.taskmanager.controllers;
+package com.example.taskmanager.models;
 
 
 import lombok.AllArgsConstructor;
