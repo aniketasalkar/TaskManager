@@ -17,15 +17,6 @@ public class User extends BaseModel{
     @Column(nullable = false)
     private String password;
 
-//    BCryptPasswordEncoder bCryptPasswordEncoder;
-//
-//    {
-//        bCryptPasswordEncoder = new BCryptPasswordEncoder();
-//    }
-//
-//    String bCryptedPassword = bCryptPasswordEncoder.encode("password");
-//    boolean passwordIsValid = bCryptPasswordEncoder.matches("password", bCryptedPassword);
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRoles role;

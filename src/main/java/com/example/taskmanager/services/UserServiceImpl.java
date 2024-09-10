@@ -6,6 +6,7 @@ import com.example.taskmanager.models.User;
 import com.example.taskmanager.models.UserRoles;
 import com.example.taskmanager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -26,11 +27,14 @@ public class UserServiceImpl implements UserService {
             role = "USER";
         }
 
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String bCryptedPassword = bCryptPasswordEncoder.encode("password");
+
         Date currentDate = new Date();
 
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(bCryptedPassword);
         try {
             user.setRole(UserRoles.valueOf(role.toUpperCase()));
         } catch (IllegalArgumentException e) {
@@ -102,7 +106,18 @@ public class UserServiceImpl implements UserService {
                 throw new NonModifiableFieldException("Field firstName or lastName or Id are not modifiable");
             }
             field.setAccessible(true);
-            ReflectionUtils.setField(field, user, (String) value);
+            if (field.getName().equals("password")) {
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                ReflectionUtils.setField(field, user, bCryptPasswordEncoder.encode((String) value));
+            } else if (field.getName().equals("role")) {
+                try {
+                    ReflectionUtils.setField(field, user, UserRoles.valueOf(((String) value).toUpperCase()));
+                } catch (IllegalArgumentException e) {
+                    throw new InvalidRoleException("Invalid Role");
+                }
+            } else {
+                ReflectionUtils.setField(field, user, (String) value);
+            }
         });
 
         Date currentDate = new Date();

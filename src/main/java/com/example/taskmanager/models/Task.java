@@ -15,6 +15,7 @@ import java.util.Date;
 @Entity
 @Table(name = "Tasks")
 public class Task extends BaseModel {
+    @Column(nullable = false)
     private String title;
     private String description;
 
@@ -32,5 +33,4 @@ public class Task extends BaseModel {
 
     @ManyToOne
     private User assignee;
-    private float point;
 }

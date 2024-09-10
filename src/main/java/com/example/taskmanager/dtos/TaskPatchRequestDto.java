@@ -1,25 +1,21 @@
 package com.example.taskmanager.dtos;
 
-
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
+@Data
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class TaskRequestDto {
-    @NotEmpty(message = "Title Required")
+@AllArgsConstructor
+
+public class TaskPatchRequestDto {
     private String title;
     private String description;
     private String priority;
     private Date dueDate;
     private float points;
     private String type;
-
 }
