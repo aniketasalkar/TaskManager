@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class ProjectController {
@@ -47,5 +50,25 @@ public class ProjectController {
 
         return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/projects")
+    public ResponseEntity<List<ProjectResponseDto>> getAllProjects() {
+        List<ProjectResponseDto> responseDtos = new ArrayList<>();
+        List<Project> projects = projectService.getAllProjects();
+
+        for (Project project : projects) {
+            ProjectResponseDto projectResponseDto = new ProjectResponseDto();
+
+            projectResponseDto.setId(project.getId());
+            projectResponseDto.setName(project.getName());
+            projectResponseDto.setDescription(project.getDescription());
+            projectResponseDto.setStatus(project.getStatus().toString());
+            projectResponseDto.setOwner(project.getOwner().getEmail());
+
+            responseDtos.add(projectResponseDto);
+        }
+
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 }
