@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -70,5 +71,19 @@ public class ProjectController {
         }
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    @PatchMapping("/projects/{id}")
+    public ResponseEntity<ProjectResponseDto> updateProject(@PathVariable("id") Long id, @Valid @RequestBody Map<String, Object> projectDetails) {
+        Project project = projectService.updateProject(id, projectDetails);
+
+        ProjectResponseDto projectResponseDto = new ProjectResponseDto();
+        projectResponseDto.setId(id);
+        projectResponseDto.setName(project.getName());
+        projectResponseDto.setDescription(project.getDescription());
+        projectResponseDto.setStatus(String.valueOf(project.getStatus()));
+        projectResponseDto.setOwner(project.getOwner() != null ? project.getOwner().getEmail() : null);
+
+        return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
     }
 }

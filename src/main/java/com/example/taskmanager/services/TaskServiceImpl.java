@@ -113,7 +113,8 @@ public class TaskServiceImpl implements TaskService {
             } else if (field.getName().equals("assignee")) {
                 try {
 //                    User user = userRepository.findByEmail((String) entry.getValue()).get();
-                    ReflectionUtils.setField(field, task, userRepository.findByEmail((String) entry.getValue()).get());
+                    ReflectionUtils.setField(field, task, userRepository.findByEmail((String) entry.getValue()).
+                            orElseThrow(() -> new UserNotFoundException("User not found")));
                 } catch (Exception e) {
                     throw new UserNotFoundException("User not found");
                 }
