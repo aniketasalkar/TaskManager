@@ -2,10 +2,7 @@ package com.example.taskmanager.models;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -15,6 +12,7 @@ import lombok.Setter;
 @Table(name = "Projects")
 public class Project extends BaseModel{
 
+    @Column(nullable = false)
     private String name;
     private String description;
 

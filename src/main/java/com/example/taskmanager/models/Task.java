@@ -33,4 +33,8 @@ public class Task extends BaseModel {
 
     @ManyToOne
     private User assignee;
+
+//    @Column(nullable = false)
+//    @ManyToOne
+//    private Project project;
 }

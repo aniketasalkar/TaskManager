@@ -21,5 +21,6 @@ public class TaskRequestDto {
     private Date dueDate;
     private float points;
     private String type;
+//    private long projectId;
 
 }
