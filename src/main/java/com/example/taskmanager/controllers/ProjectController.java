@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/taskmanager")
 public class ProjectController {
 
     @Autowired
@@ -26,14 +26,7 @@ public class ProjectController {
         Project project = projectService.createProject(projectRequestDto.getName().strip(), projectRequestDto.getDescription(),
                 projectRequestDto.getStatus().strip(), projectRequestDto.getOwner().strip());
 
-        ProjectResponseDto projectResponseDto = new ProjectResponseDto();
-        projectResponseDto.setId(project.getId());
-        projectResponseDto.setName(project.getName());
-        projectResponseDto.setDescription(project.getDescription());
-        projectResponseDto.setStatus(project.getStatus().toString());
-        projectResponseDto.setOwner(project.getOwner().getEmail());
-
-        return new ResponseEntity<>(projectResponseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(from(project), HttpStatus.CREATED);
 
     }
 
@@ -41,15 +34,7 @@ public class ProjectController {
     public ResponseEntity<ProjectResponseDto> getProjectById(@PathVariable("id") Long id) {
         Project project = projectService.getProjectById(id);
 
-        ProjectResponseDto projectResponseDto = new ProjectResponseDto();
-
-        projectResponseDto.setId(project.getId());
-        projectResponseDto.setName(project.getName());
-        projectResponseDto.setDescription(project.getDescription());
-        projectResponseDto.setStatus(project.getStatus().toString());
-        projectResponseDto.setOwner(project.getOwner().getEmail());
-
-        return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(from(project), HttpStatus.OK);
 
     }
 
@@ -59,15 +44,7 @@ public class ProjectController {
         List<Project> projects = projectService.getAllProjects();
 
         for (Project project : projects) {
-            ProjectResponseDto projectResponseDto = new ProjectResponseDto();
-
-            projectResponseDto.setId(project.getId());
-            projectResponseDto.setName(project.getName());
-            projectResponseDto.setDescription(project.getDescription());
-            projectResponseDto.setStatus(project.getStatus().toString());
-            projectResponseDto.setOwner(project.getOwner().getEmail());
-
-            responseDtos.add(projectResponseDto);
+            responseDtos.add(from(project));
         }
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
@@ -77,13 +54,18 @@ public class ProjectController {
     public ResponseEntity<ProjectResponseDto> updateProject(@PathVariable("id") Long id, @Valid @RequestBody Map<String, Object> projectDetails) {
         Project project = projectService.updateProject(id, projectDetails);
 
+        return new ResponseEntity<>(from(project), HttpStatus.OK);
+    }
+
+    private ProjectResponseDto from (Project project) {
         ProjectResponseDto projectResponseDto = new ProjectResponseDto();
-        projectResponseDto.setId(id);
+
+        projectResponseDto.setId(project.getId());
         projectResponseDto.setName(project.getName());
         projectResponseDto.setDescription(project.getDescription());
         projectResponseDto.setStatus(String.valueOf(project.getStatus()));
         projectResponseDto.setOwner(project.getOwner() != null ? project.getOwner().getEmail() : null);
 
-        return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
+        return projectResponseDto;
     }
 }

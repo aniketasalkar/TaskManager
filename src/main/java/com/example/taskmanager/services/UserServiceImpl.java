@@ -1,7 +1,6 @@
 package com.example.taskmanager.services;
 
 import com.example.taskmanager.exceptions.*;
-import com.example.taskmanager.dtos.UserResponseDto;
 import com.example.taskmanager.models.User;
 import com.example.taskmanager.models.UserRoles;
 import com.example.taskmanager.repositories.UserRepository;
@@ -52,24 +51,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseDto> getAllUsers() {
+    public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
-        List<UserResponseDto> userResponseDtos = new ArrayList<>();
 
-        for (User user : users) {
-            UserResponseDto userResponseDto = new UserResponseDto();
-            userResponseDto.setId(user.getId());
-            userResponseDto.setUsername(user.getUsername());
-            userResponseDto.setEmail(user.getEmail());
-            userResponseDto.setRole(user.getRole().toString());
-            userResponseDto.setPhone(user.getPhone());
-            userResponseDto.setFirstName(user.getFirstName());
-            userResponseDto.setLastName(user.getLastName());
-
-            userResponseDtos.add(userResponseDto);
-        }
-
-        return userResponseDtos;
+        return users;
     }
 
     @Override

@@ -16,7 +16,7 @@ public interface UserService {
     User addUser(String username, String password, String role, String email, String phone, String firstname,
                  String lastName);
 
-    List<UserResponseDto> getAllUsers();
+    List<User> getAllUsers();
 
     User getUserByEmail(String email);
 
